@@ -19,4 +19,9 @@ public class Schedule extends BaseEntity {
     public static Schedule of(String title, String contents, String name, String password) {
         return new Schedule(title, contents, name, password);
     }
+
+    public void update(String title, String name) {
+        this.title = title;
+        this.name = name;
+    }
 }

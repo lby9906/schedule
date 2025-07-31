@@ -32,6 +32,8 @@ public class ScheduleWriteService {
 
         if (request.getPassword().equals(schedule.getPassword())) {
             schedule.update(request.getTitle(), request.getName());
+            scheduleRepository.flush();
+
             return new ScheduleUpdateResponse(
                     schedule.getId(), schedule.getTitle(),
                     schedule.getContents(), schedule.getName(),

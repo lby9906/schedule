@@ -25,8 +25,8 @@ public class ScheduleController {
     }
 
     @GetMapping({"","/{scheduleId}"})
-    public ScheduleFindResponse findAll(@PathVariable(required = false) Long scheduleId) {
-        return scheduleReadService.findAll(scheduleId);
+    public ScheduleFindResponse find(@PathVariable(required = false) Long scheduleId, @RequestParam(required = false) String name) {
+        return scheduleReadService.find(scheduleId, name);
     }
 
     @PatchMapping("/{scheduleId}")

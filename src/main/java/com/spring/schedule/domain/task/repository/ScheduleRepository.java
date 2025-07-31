@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByOrderByUpdatedAtDesc();
     Optional<Schedule> findScheduleById(Long id);
+    List<Schedule> findAllScheduleByName(String name);
 }

@@ -5,11 +5,8 @@ import com.spring.schedule.application.task.dto.response.ScheduleResponse;
 import com.spring.schedule.domain.task.entity.Schedule;
 import com.spring.schedule.domain.task.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +16,8 @@ import java.util.stream.Collectors;
 public class ScheduleReadService {
     private final ScheduleRepository scheduleRepository;
 
-    public ScheduleFindResponse findAll(Long scheduleId) {
-        if (scheduleId == null) {
+    public ScheduleFindResponse find(Long scheduleId, String name) {
+        if (scheduleId == null && name == null) {
             List<Schedule> findSchedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();
             List<ScheduleResponse> scheduleResponseList = findSchedules
                     .stream()
@@ -30,7 +27,18 @@ public class ScheduleReadService {
                     .collect(Collectors.toList());
 
             return new ScheduleFindResponse(scheduleResponseList, null);
-        } else {
+        } else if (scheduleId == null && name != null) {
+            List<Schedule> scheduleByName = scheduleRepository.findAllScheduleByName(name);
+            List<ScheduleResponse> scheduleNameList = scheduleByName
+                    .stream()
+                    .map(task -> new ScheduleResponse(
+                            task.getId(), task.getTitle(),
+                            task.getContents(), task.getName()))
+                    .collect(Collectors.toList());
+
+            return new ScheduleFindResponse(scheduleNameList, null);
+        }
+        else {
             Schedule schedule = scheduleRepository.findScheduleById(scheduleId).get();
             return new ScheduleFindResponse(null,
                     new ScheduleResponse(schedule.getId(), schedule.getTitle(),

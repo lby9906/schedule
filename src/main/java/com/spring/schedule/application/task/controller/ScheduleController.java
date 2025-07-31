@@ -1,13 +1,13 @@
 package com.spring.schedule.application.task.controller;
 
 import com.spring.schedule.application.task.dto.request.ScheduleRequest;
+import com.spring.schedule.application.task.dto.response.ScheduleFindResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleResponse;
+import com.spring.schedule.application.task.service.ScheduleReadService;
 import com.spring.schedule.application.task.service.ScheduleWriteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleController {
 
     private final ScheduleWriteService scheduleWriteService;
+    private final ScheduleReadService scheduleReadService;
 
     @PostMapping
     public ScheduleResponse create(@RequestBody ScheduleRequest scheduleRequest) {
         return scheduleWriteService.create(scheduleRequest);
+    }
+
+    @GetMapping({"","/{scheduleId}"})
+    public ScheduleFindResponse findAll(@PathVariable(required = false) Long scheduleId) {
+        return scheduleReadService.findAll(scheduleId);
     }
 }

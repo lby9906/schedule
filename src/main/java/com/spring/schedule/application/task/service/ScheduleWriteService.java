@@ -40,4 +40,17 @@ public class ScheduleWriteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
     }
+
+    public String remove(Long scheduleId, String password) {
+        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 일정이 없습니다."));
+
+        if (password.equals(schedule.getPassword())) {
+            scheduleRepository.delete(schedule);
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        }
+
+        return "삭제 완료";
+    }
 }

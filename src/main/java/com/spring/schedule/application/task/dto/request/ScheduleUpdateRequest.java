@@ -16,6 +16,6 @@ public class ScheduleUpdateRequest {
     private String name;
 
     @NotBlank(message = "비밀번호를 필수로 입력해주세요.")
-    @Size(min = 1, max = 30, message = "제목을 1 ~ 30자 사이로 입력해주세요.")
+    @Size(min = 1, max = 30, message = "비밀번호를 1 ~ 30자 사이로 입력해주세요.")
     private String password;
 }

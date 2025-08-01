@@ -6,11 +6,11 @@ import com.spring.schedule.application.task.dto.response.ScheduleResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleUpdateResponse;
 import com.spring.schedule.domain.task.entity.Schedule;
 import com.spring.schedule.domain.task.repository.ScheduleRepository;
+import com.spring.schedule.exception.ErrorCode;
+import com.spring.schedule.exception.ScheduleException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -27,8 +27,8 @@ public class ScheduleWriteService {
     }
 
     public ScheduleUpdateResponse update(ScheduleUpdateRequest request, Long scheduleId) {
-        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 일정이 없습니다."));
+        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
+                () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
         if (request.getPassword().equals(schedule.getPassword())) {
             schedule.update(request.getTitle(), request.getName());
@@ -39,18 +39,18 @@ public class ScheduleWriteService {
                     schedule.getContents(), schedule.getName(),
                     schedule.getCreatedAt(), schedule.getUpdatedAt());
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+            throw new ScheduleException(ErrorCode.NOT_MATCH_EMAIL_PASSWORD);
         }
     }
 
     public String remove(Long scheduleId, String password) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 일정이 없습니다."));
+                new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
         if (password.equals(schedule.getPassword())) {
             scheduleRepository.delete(schedule);
         }else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+            throw new ScheduleException(ErrorCode.NOT_MATCH_EMAIL_PASSWORD);
         }
 
         return "삭제 완료";

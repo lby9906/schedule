@@ -7,6 +7,7 @@ import com.spring.schedule.application.task.dto.response.ScheduleResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleUpdateResponse;
 import com.spring.schedule.application.task.service.ScheduleReadService;
 import com.spring.schedule.application.task.service.ScheduleWriteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ScheduleController {
     private final ScheduleReadService scheduleReadService;
 
     @PostMapping
-    public ScheduleResponse create(@RequestBody ScheduleRequest scheduleRequest) {
+    public ScheduleResponse create(@RequestBody @Valid ScheduleRequest scheduleRequest) {
         return scheduleWriteService.create(scheduleRequest);
     }
 
@@ -30,7 +31,7 @@ public class ScheduleController {
     }
 
     @PatchMapping("/{scheduleId}")
-    public ScheduleUpdateResponse update(@RequestBody ScheduleUpdateRequest request, @PathVariable Long scheduleId) {
+    public ScheduleUpdateResponse update(@RequestBody @Valid ScheduleUpdateRequest request, @PathVariable Long scheduleId) {
         return scheduleWriteService.update(request, scheduleId);
     }
 

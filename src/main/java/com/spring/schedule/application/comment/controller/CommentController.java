@@ -3,6 +3,7 @@ package com.spring.schedule.application.comment.controller;
 import com.spring.schedule.application.comment.dto.request.CommentRequest;
 import com.spring.schedule.application.comment.dto.response.CommentResponse;
 import com.spring.schedule.application.comment.service.CommentWriteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class CommentController {
     private final CommentWriteService commentWriteService;
 
     @PostMapping("/{scheduleId}")
-    public CommentResponse create(@RequestBody CommentRequest request, @PathVariable Long scheduleId) {
+    public CommentResponse create(@RequestBody @Valid CommentRequest request, @PathVariable Long scheduleId) {
         return commentWriteService.create(request, scheduleId);
     }
 }

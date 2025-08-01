@@ -9,5 +9,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ScheduleFindResponse {
     private List<ScheduleResponse> scheduleResponses;
-    private ScheduleResponse scheduleResponse;
+    private ScheduleResponseDto scheduleResponse;
 }

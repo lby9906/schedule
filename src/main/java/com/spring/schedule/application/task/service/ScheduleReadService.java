@@ -1,7 +1,11 @@
 package com.spring.schedule.application.task.service;
 
+import com.spring.schedule.application.task.dto.response.ScheduleCommentResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleFindResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleResponse;
+import com.spring.schedule.application.task.dto.response.ScheduleResponseDto;
+import com.spring.schedule.domain.comment.entity.Comment;
+import com.spring.schedule.domain.comment.repository.CommentRepository;
 import com.spring.schedule.domain.task.entity.Schedule;
 import com.spring.schedule.domain.task.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleReadService {
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     public ScheduleFindResponse find(Long scheduleId, String name) {
         if (scheduleId == null && name == null) {
@@ -40,9 +45,20 @@ public class ScheduleReadService {
         }
         else {
             Schedule schedule = scheduleRepository.findScheduleById(scheduleId).get();
+            List<Comment> commentByScheduleId = commentRepository.findCommentByScheduleId(scheduleId);
+
+            List<ScheduleCommentResponse> commentResponses = commentByScheduleId
+                    .stream()
+                    .map(comment -> new ScheduleCommentResponse(
+                            comment.getId(), comment.getScheduleId(),
+                            comment.getName(), comment.getContents(),
+                            comment.getCreatedAt(), comment.getUpdatedAt()
+                    )
+            ).collect(Collectors.toList());
+
             return new ScheduleFindResponse(null,
-                    new ScheduleResponse(schedule.getId(), schedule.getTitle(),
-                            schedule.getContents(), schedule.getName()));
+                    new ScheduleResponseDto(schedule.getId(), schedule.getTitle(),
+                            schedule.getContents(), schedule.getName(), commentResponses));
         }
     }
 }

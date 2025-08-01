@@ -22,7 +22,7 @@ public class CommentWriteService {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
                 new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
-        if (commentRepository.countByScheduleId(scheduleId) > 10) {
+        if (commentRepository.countByScheduleId(scheduleId) >= 10) {
             throw new ScheduleException(ErrorCode.ONLY_TEN_REGISTER_COMMENTS);
         }
 

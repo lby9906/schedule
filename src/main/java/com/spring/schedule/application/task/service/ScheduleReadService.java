@@ -21,6 +21,7 @@ public class ScheduleReadService {
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
 
+    //일정 조회
     public ScheduleFindResponse find(Long scheduleId, String name) {
         if (scheduleId == null && name == null) {
             List<Schedule> findSchedules = scheduleRepository.findAllByOrderByUpdatedAtDesc();

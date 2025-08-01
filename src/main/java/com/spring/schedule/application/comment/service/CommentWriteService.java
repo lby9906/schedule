@@ -18,6 +18,7 @@ public class CommentWriteService {
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
 
+    //댓글 생성
     public CommentResponse create(CommentRequest request, Long scheduleId) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
                 new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));

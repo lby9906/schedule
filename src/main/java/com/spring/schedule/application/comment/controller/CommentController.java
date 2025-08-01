@@ -14,6 +14,7 @@ public class CommentController {
 
     private final CommentWriteService commentWriteService;
 
+    //댓글 생성
     @PostMapping("/{scheduleId}")
     public CommentResponse create(@RequestBody @Valid CommentRequest request, @PathVariable Long scheduleId) {
         return commentWriteService.create(request, scheduleId);

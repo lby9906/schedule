@@ -19,6 +19,7 @@ public class ScheduleWriteService {
 
     private final ScheduleRepository scheduleRepository;
 
+    //일정 생성
     public ScheduleResponse create(ScheduleRequest request) {
         Schedule schedule = Schedule.of(request.getTitle(), request.getContents(), request.getName(), request.getPassword());
         scheduleRepository.save(schedule);
@@ -26,6 +27,7 @@ public class ScheduleWriteService {
         return new ScheduleResponse(schedule.getId(), schedule.getContents(), schedule.getContents(), schedule.getName());
     }
 
+    //일정 수정
     public ScheduleUpdateResponse update(ScheduleUpdateRequest request, Long scheduleId) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
                 () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -43,6 +45,7 @@ public class ScheduleWriteService {
         }
     }
 
+    //일정 삭제
     public String remove(Long scheduleId, String password) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
                 new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));

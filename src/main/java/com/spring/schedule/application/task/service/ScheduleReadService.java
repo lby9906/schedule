@@ -25,9 +25,9 @@ public class ScheduleReadService {
     //전체 일정 조회
     public List<ScheduleResponse> findAll(String name) {
         List<Schedule> scheduleList = scheduleRepository.findAllScheduleOrderByUpdatedAtDesc(name);
-        return scheduleList.stream().map(schedule -> new ScheduleResponse(
-                schedule.getId(), schedule.getTitle(), schedule.getContents(), schedule.getName()
-        )).collect(Collectors.toList());
+        return scheduleList.stream()
+                .map(schedule -> ScheduleResponse.from(schedule))
+                .collect(Collectors.toList());
     }
 
     //선택 일정 조회
@@ -36,7 +36,8 @@ public class ScheduleReadService {
                 () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
         List<Comment> commentList = commentRepository.findCommentByScheduleId(scheduleId);
-        List<ScheduleCommentResponse> commentResponses = commentList.stream().map(comment -> new ScheduleCommentResponse(comment.getId(),
+        List<ScheduleCommentResponse> commentResponses = commentList.stream()
+                .map(comment -> new ScheduleCommentResponse(comment.getId(),
                 comment.getScheduleId(), comment.getName(), comment.getContents(),
                 comment.getCreatedAt(), comment.getUpdatedAt())).collect(Collectors.toList());
 

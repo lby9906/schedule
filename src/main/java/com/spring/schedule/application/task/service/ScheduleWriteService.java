@@ -34,12 +34,9 @@ public class ScheduleWriteService {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
                 () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
-        if (request.getPassword().equals(schedule.getPassword())) {
+        if (schedule.eqPassword(request.getPassword())) {
             schedule.update(request.getTitle(), request.getName());
-            return new ScheduleUpdateResponse(
-                    schedule.getId(), schedule.getTitle(),
-                    schedule.getContents(), schedule.getName(),
-                    schedule.getCreatedAt(), updateAt);
+            return ScheduleUpdateResponse.from(schedule, updateAt);
         } else {
             throw new ScheduleException(ErrorCode.NOT_MATCH_EMAIL_PASSWORD);
         }

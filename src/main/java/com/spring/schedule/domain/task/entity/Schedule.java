@@ -24,4 +24,11 @@ public class Schedule extends BaseEntity {
         this.title = title;
         this.name = name;
     }
+
+    public Boolean eqPassword(String password) {
+        if (this.password.equals(password)) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -33,7 +33,6 @@ public class ScheduleWriteService {
     public ScheduleUpdateResponse update(ScheduleUpdateRequest request, Long scheduleId, LocalDateTime updateAt) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
                 () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
-
         if (schedule.eqPassword(request.getPassword())) {
             schedule.update(request.getTitle(), request.getName());
             return ScheduleUpdateResponse.from(schedule, updateAt);
@@ -44,10 +43,10 @@ public class ScheduleWriteService {
 
     //일정 삭제
     public String remove(Long scheduleId, String password) {
-        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() ->
-                new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
+        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
+                () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
-        if (password.equals(schedule.getPassword())) {
+        if (schedule.eqPassword(password)) {
             scheduleRepository.delete(schedule);
         }else {
             throw new ScheduleException(ErrorCode.NOT_MATCH_EMAIL_PASSWORD);

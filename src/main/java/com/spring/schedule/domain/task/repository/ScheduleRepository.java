@@ -2,12 +2,14 @@ package com.spring.schedule.domain.task.repository;
 
 import com.spring.schedule.domain.task.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findAllByOrderByUpdatedAtDesc();
     Optional<Schedule> findScheduleById(Long id);
-    List<Schedule> findAllScheduleByName(String name);
+
+    @Query(value = "SELECT * FROM schedule WHERE (:name IS NULL OR name LIKE %:name%);", nativeQuery = true)
+    List<Schedule> findAllScheduleOrderByUpdatedAtDesc(String name);
 }

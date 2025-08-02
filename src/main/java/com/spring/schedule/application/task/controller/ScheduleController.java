@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -25,9 +27,9 @@ public class ScheduleController {
         return scheduleWriteService.create(scheduleRequest);
     }
 
-    @GetMapping({"","/{scheduleId}"})
-    public ScheduleFindResponse find(@PathVariable(required = false) Long scheduleId, @RequestParam(required = false) String name) {
-        return scheduleReadService.find(scheduleId, name);
+    @GetMapping
+    public List<ScheduleResponse> findAll(@RequestParam(required = false) String name) {
+        return scheduleReadService.findAll(name);
     }
 
     @PatchMapping("/{scheduleId}")

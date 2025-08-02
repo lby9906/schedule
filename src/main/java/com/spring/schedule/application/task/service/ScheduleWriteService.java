@@ -26,7 +26,7 @@ public class ScheduleWriteService {
         Schedule schedule = Schedule.of(request.getTitle(), request.getContents(), request.getName(), request.getPassword());
         scheduleRepository.save(schedule);
 
-        return new ScheduleResponse(schedule.getId(), schedule.getContents(), schedule.getContents(), schedule.getName());
+        return ScheduleResponse.from(schedule);
     }
 
     //일정 수정

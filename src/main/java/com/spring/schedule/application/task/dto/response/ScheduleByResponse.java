@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class ScheduleResponseDto {
+public class ScheduleByResponse {
     private Long id;
     private String title;
     private String contents;

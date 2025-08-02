@@ -2,8 +2,8 @@ package com.spring.schedule.application.task.controller;
 
 import com.spring.schedule.application.task.dto.request.ScheduleRequest;
 import com.spring.schedule.application.task.dto.request.ScheduleUpdateRequest;
-import com.spring.schedule.application.task.dto.response.ScheduleFindResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleResponse;
+import com.spring.schedule.application.task.dto.response.ScheduleByResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleUpdateResponse;
 import com.spring.schedule.application.task.service.ScheduleReadService;
 import com.spring.schedule.application.task.service.ScheduleWriteService;
@@ -30,6 +30,11 @@ public class ScheduleController {
     @GetMapping
     public List<ScheduleResponse> findAll(@RequestParam(required = false) String name) {
         return scheduleReadService.findAll(name);
+    }
+
+    @GetMapping("/{scheduleId}")
+    public ScheduleByResponse findById(@PathVariable Long scheduleId) {
+        return scheduleReadService.findById(scheduleId);
     }
 
     @PatchMapping("/{scheduleId}")

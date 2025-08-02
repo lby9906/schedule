@@ -1,9 +1,14 @@
 package com.spring.schedule.application.task.service;
 
+import com.spring.schedule.application.task.dto.response.ScheduleCommentResponse;
 import com.spring.schedule.application.task.dto.response.ScheduleResponse;
+import com.spring.schedule.application.task.dto.response.ScheduleByResponse;
+import com.spring.schedule.domain.comment.entity.Comment;
 import com.spring.schedule.domain.comment.repository.CommentRepository;
 import com.spring.schedule.domain.task.entity.Schedule;
 import com.spring.schedule.domain.task.repository.ScheduleRepository;
+import com.spring.schedule.exception.ErrorCode;
+import com.spring.schedule.exception.ScheduleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,5 +28,22 @@ public class ScheduleReadService {
         return scheduleList.stream().map(schedule -> new ScheduleResponse(
                 schedule.getId(), schedule.getTitle(), schedule.getContents(), schedule.getName()
         )).collect(Collectors.toList());
+    }
+
+    //선택 일정 조회
+    public ScheduleByResponse findById(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
+                () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
+
+        List<Comment> commentList = commentRepository.findCommentByScheduleId(scheduleId);
+        List<ScheduleCommentResponse> commentResponses = commentList.stream().map(comment -> new ScheduleCommentResponse(comment.getId(),
+                comment.getScheduleId(), comment.getName(), comment.getContents(),
+                comment.getCreatedAt(), comment.getUpdatedAt())).collect(Collectors.toList());
+
+        return new ScheduleByResponse(
+                schedule.getId(), schedule.getTitle(),
+                schedule.getContents(), schedule.getName(),
+                commentResponses);
+
     }
 }

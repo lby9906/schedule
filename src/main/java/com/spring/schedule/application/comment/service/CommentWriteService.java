@@ -30,8 +30,6 @@ public class CommentWriteService {
         Comment comment = Comment.of(request.getContents(), request.getName(), request.getPassword(), schedule.getId());
         commentRepository.save(comment);
 
-        return new CommentResponse(comment.getId(), comment.getScheduleId(),
-                comment.getName(), comment.getContents(), comment.getCreatedAt(),
-                comment.getUpdatedAt());
+        return CommentResponse.from(comment);
     }
 }

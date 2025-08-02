@@ -1,5 +1,6 @@
 package com.spring.schedule.application.task.dto.response;
 
+import com.spring.schedule.domain.task.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,4 +14,10 @@ public class ScheduleByResponse {
     private String contents;
     private String name;
     private List<ScheduleCommentResponse> scheduleCommentResponses;
+
+    public static ScheduleByResponse from(Schedule schedule, List<ScheduleCommentResponse> commentResponses) {
+        return new ScheduleByResponse(
+                schedule.getId(), schedule.getTitle(),
+                schedule.getContents(), schedule.getName(), commentResponses);
+    }
 }

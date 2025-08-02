@@ -36,15 +36,12 @@ public class ScheduleReadService {
                 () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
         List<Comment> commentList = commentRepository.findCommentByScheduleId(scheduleId);
-        List<ScheduleCommentResponse> commentResponses = commentList.stream()
-                .map(comment -> new ScheduleCommentResponse(comment.getId(),
-                comment.getScheduleId(), comment.getName(), comment.getContents(),
-                comment.getCreatedAt(), comment.getUpdatedAt())).collect(Collectors.toList());
+        List<ScheduleCommentResponse> commentResponses = commentList
+                .stream()
+                .map(comment -> ScheduleCommentResponse.from(comment))
+                .collect(Collectors.toList());
 
-        return new ScheduleByResponse(
-                schedule.getId(), schedule.getTitle(),
-                schedule.getContents(), schedule.getName(),
-                commentResponses);
+        return ScheduleByResponse.from(schedule, commentResponses);
 
     }
 }

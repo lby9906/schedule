@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,18 +30,16 @@ public class ScheduleWriteService {
     }
 
     //일정 수정
-    public ScheduleUpdateResponse update(ScheduleUpdateRequest request, Long scheduleId) {
+    public ScheduleUpdateResponse update(ScheduleUpdateRequest request, Long scheduleId, LocalDateTime updateAt) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(
                 () -> new ScheduleException(ErrorCode.NOT_FOUND_SCHEDULE));
 
         if (request.getPassword().equals(schedule.getPassword())) {
             schedule.update(request.getTitle(), request.getName());
-            scheduleRepository.flush();
-
             return new ScheduleUpdateResponse(
                     schedule.getId(), schedule.getTitle(),
                     schedule.getContents(), schedule.getName(),
-                    schedule.getCreatedAt(), schedule.getUpdatedAt());
+                    schedule.getCreatedAt(), updateAt);
         } else {
             throw new ScheduleException(ErrorCode.NOT_MATCH_EMAIL_PASSWORD);
         }

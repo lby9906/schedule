@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -39,7 +40,8 @@ public class ScheduleController {
 
     @PatchMapping("/{scheduleId}")
     public ScheduleUpdateResponse update(@RequestBody @Valid ScheduleUpdateRequest request, @PathVariable Long scheduleId) {
-        return scheduleWriteService.update(request, scheduleId);
+        LocalDateTime now = LocalDateTime.now();
+        return scheduleWriteService.update(request, scheduleId, now);
     }
 
     @DeleteMapping("/{scheduleId}")
